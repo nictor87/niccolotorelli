@@ -78,10 +78,18 @@ button {
   padding-inline: 4px;
 }
 
-.bar a:hover,
-.bar button:hover {
+.bar a:focus-visible,
+.bar button:focus-visible {
   background: linear-gradient(var(--tab-ink), var(--tab-ink)) center / 100% 1.4em no-repeat;
   color: var(--tab-paper);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .bar a:hover,
+  .bar button:hover {
+    background: linear-gradient(var(--tab-ink), var(--tab-ink)) center / 100% 1.4em no-repeat;
+    color: var(--tab-paper);
+  }
 }
 
 .masthead a,
@@ -355,12 +363,20 @@ img {
   }
 }
 
-.card-link:hover h3,
 .card-link:focus-visible h3 {
   background: var(--ink);
   color: var(--paper);
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card-link:hover h3 {
+    background: var(--ink);
+    color: var(--paper);
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
 }
 
 .card-sheet::after {
