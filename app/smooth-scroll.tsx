@@ -7,8 +7,12 @@ let instance: Lenis | null = null;
 
 export function setInfiniteScroll(enabled: boolean) {
   if (!instance) return;
-  const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-  instance.options.infinite = enabled && finePointer;
+  const loopable = window.matchMedia(
+    "(hover: hover) and (pointer: fine) and (orientation: landscape)",
+  ).matches;
+  const next = enabled && loopable;
+  if (instance.options.infinite === next) return;
+  instance.options.infinite = next;
   instance.resize();
 }
 
