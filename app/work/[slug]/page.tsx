@@ -134,7 +134,6 @@ export default async function Project({ params }: PageProps<"/work/[slug]">) {
       <nav aria-label="Next story" className="next">
         <Link
           href={hrefOf(next)}
-          prefetch
           className="next-link"
           data-cursor="Next story"
         >

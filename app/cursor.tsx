@@ -23,10 +23,14 @@ export function Cursor() {
     };
 
     window.addEventListener("pointermove", move, { passive: true });
+    window.addEventListener("wheel", hide, { passive: true });
+    window.addEventListener("scroll", hide, { passive: true });
     document.documentElement.addEventListener("pointerleave", hide);
 
     return () => {
       window.removeEventListener("pointermove", move);
+      window.removeEventListener("wheel", hide);
+      window.removeEventListener("scroll", hide);
       document.documentElement.removeEventListener("pointerleave", hide);
     };
   });

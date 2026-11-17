@@ -24,7 +24,6 @@ export function StoryCard({
     <article className="card">
       <Link
         href={href}
-        prefetch
         className="card-link"
         data-cursor={`Open, ${String(pageCount).padStart(2, "0")} images`}
       >

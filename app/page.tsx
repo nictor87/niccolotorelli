@@ -69,7 +69,6 @@ function Opening({ story, clone = false }: { story: Story; clone?: boolean }) {
         ) : (
           <Link
             href={hrefOf(story)}
-            prefetch
             className="opening-link"
             aria-label={`${story.title}, ${story.issue}, ${pageCount} images`}
             data-cursor={`Open, ${String(pageCount).padStart(2, "0")} images`}

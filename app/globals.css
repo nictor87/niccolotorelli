@@ -85,8 +85,8 @@ button {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .bar a:hover,
-  .bar button:hover {
+  html:not([data-scrolling]) .bar a:hover,
+  html:not([data-scrolling]) .bar button:hover {
     background: linear-gradient(var(--tab-ink), var(--tab-ink)) center / 100% 1.4em no-repeat;
     color: var(--tab-paper);
   }
@@ -371,7 +371,7 @@ img {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .card-link:hover h3 {
+  html:not([data-scrolling]) .card-link:hover h3 {
     background: var(--ink);
     color: var(--paper);
     box-decoration-break: clone;

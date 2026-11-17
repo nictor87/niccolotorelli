@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { isScrolling } from "./smooth-scroll";
 import type { Page } from "./work";
 
 const CUTS = [0, 6, 9, 17, 21, 30, 34, 41, 52, 55, 63, 70, 74, 83, 88, 94, 100];
@@ -27,7 +28,12 @@ export function ScanSheet({ image, sizes, eager }: ScanSheetProps) {
   const [armed, setArmed] = useState(true);
 
   const scan = (event: React.PointerEvent) => {
-    if (!armed || (event.movementX === 0 && event.movementY === 0)) return;
+    if (
+      !armed ||
+      isScrolling() ||
+      (event.movementX === 0 && event.movementY === 0)
+    )
+      return;
     setArmed(false);
     if (canScan()) setPass((count) => count + 1);
   };
