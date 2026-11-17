@@ -1,69 +1,138 @@
 import Image from "next/image";
+import Link from "next/link";
+import { Bands } from "./bands";
+import { Loop } from "./loop";
+import { SplitText } from "./split-text";
+import { StoryCard } from "./story-card";
+import {
+  featureOf,
+  hrefOf,
+  leadSpread,
+  pagesOf,
+  work,
+  yearSpan,
+  type Story,
+} from "./work";
+
+type Module = {
+  kind: "pair" | "center" | "left" | "right";
+  slugs: Story["slug"][];
+};
+
+const SIZES: Record<Module["kind"], string> = {
+  pair: "(min-width: 768px) 50vw, 100vw",
+  center: "(min-width: 768px) 67vw, 100vw",
+  left: "(min-width: 768px) 50vw, 84vw",
+  right: "(min-width: 768px) 50vw, 84vw",
+};
+
+const modules: Module[] = [
+  { kind: "pair", slugs: ["dust-28", "dust-16-fire"] },
+  { kind: "center", slugs: ["dust-22"] },
+  { kind: "left", slugs: ["dust-27"] },
+  { kind: "pair", slugs: ["dust-21", "dust-29"] },
+  { kind: "right", slugs: ["dust-24"] },
+  { kind: "center", slugs: ["dust-16-victory"] },
+  { kind: "pair", slugs: ["dust-25", "dust-15"] },
+];
+
+function storyFor(slug: Story["slug"]): Story {
+  const story = work.find((candidate) => candidate.slug === slug);
+  if (!story) throw new Error(`Missing story ${slug}`);
+  return story;
+}
+
+function Opening({ story, clone = false }: { story: Story; clone?: boolean }) {
+  const pageCount = pagesOf(story).length;
+  const sheet = (
+    <Image
+      src={leadSpread.src}
+      width={leadSpread.w}
+      height={leadSpread.h}
+      sizes="(min-width: 768px) 96vw, 100vw"
+      alt=""
+      loading="eager"
+      fetchPriority={clone ? "auto" : "high"}
+    />
+  );
+
+  return (
+    <section
+      className={clone ? "opening loop-clone" : "opening"}
+      aria-label={clone ? undefined : "Opening spread"}
+      aria-hidden={clone || undefined}
+      inert={clone || undefined}
+    >
+      <div className="opening-frame">
+        {clone ? (
+          <span className="opening-sheet">{sheet}</span>
+        ) : (
+          <Link
+            href={hrefOf(story)}
+            prefetch
+            className="opening-link"
+            aria-label={`${story.title}, ${story.issue}, ${pageCount} images`}
+            data-cursor={`Open, ${String(pageCount).padStart(2, "0")} images`}
+          >
+            <span className="opening-sheet">{sheet}</span>
+          </Link>
+        )}
+        <div className="opening-type">
+          <p className="opening-meta">
+            <span>
+              {story.title}, {story.issue}
+            </span>
+            <span>
+              {work.length} stories, {yearSpan()}
+            </span>
+          </p>
+          {clone ? (
+            <p className="wordmark">
+              <SplitText text="Nicco Torelli" />
+            </p>
+          ) : (
+            <h1 className="wordmark">
+              <SplitText text="Nicco Torelli" delay={900} />
+            </h1>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export default function Home() {
+  const first = work[0];
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <main id="content" tabIndex={-1}>
+      <Bands />
+      <Loop />
+      <Opening story={first} />
+
+      <h2 className="sr-only">Stories</h2>
+      <div className="modules">
+        {modules.map((module, moduleIndex) => (
+          <div key={module.slugs[0]} className={`module module-${module.kind}`}>
+            {module.slugs.map((slug) => {
+              const story = storyFor(slug);
+              return (
+                <StoryCard
+                  key={slug}
+                  story={story}
+                  href={hrefOf(story)}
+                  image={featureOf(story)}
+                  pageCount={pagesOf(story).length}
+                  sizes={SIZES[module.kind]}
+                  eager={moduleIndex === 0}
+                />
+              );
+            })}
+          </div>
+        ))}
+      </div>
+
+      <Opening story={first} clone />
+    </main>
   );
 }

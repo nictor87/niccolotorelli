@@ -39,3 +39,17 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# source media (originals stay local)
+/public/*.pdf
+/public/*.tif
+/public/*.tiff
+/public/*.jpg
+/public/*.jpeg
+
+# local design and agent docs
+.impeccable/
+*.md
+
+# cloudflare local state
+.wrangler/
